@@ -23,6 +23,15 @@ if [ "$SERVICE_TYPE" == "swarm-manager" ] && [ "$ROLE" == "master" ]; then
    docker run -i --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws ec2 create-tags --resources ${INSTANCE_ID} --tags Key=WorkerToken,Value=$(docker swarm join-token -q worker)
    docker rm -f aws
    SD_BOOT="-server -advertise ${PR_IPV4} -bootstrap"
+   
+   docker service create --with-registry-auth --replicas 1 --limit-memory="128mb" --name="visualizer" \
+      --constraint 'node.role == manager' --constraint 'engine.labels.role == master' \
+      -p 4000:4000 \
+      -e PORT=4000 -e HOST=${HOST} \
+      -e SERVICE_4000_NAME="visualizer" -e SERVICE_8080_TAGS="service" \
+       --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+       manomarks/visualizer
+    
 elif [ "$SERVICE_TYPE" == "swarm-manager" ] && [ "$ROLE" == "slave" ]; then
    while [[ -z $SWARM_MASTER_NODE ]]; do
        echo 'Waiting for swarm master run ...'
@@ -79,11 +88,3 @@ echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 docker network create --driver overlay syslog
 docker service create --mode global --with-registry-auth --name="syslog"                 -e SERVICE_5514_NAME="syslog" -e SERVICE_5514_TAGS="service" --limit-memory="16mb" --network syslog registry.monapi.com:5000/monapi/syslog
 docker service create --mode global --with-registry-auth --name="os-api"    -p 8080:8080 -e SERVICE_8080_NAME="os-api" -e SERVICE_8080_TAGS="service" --limit-memory="16mb" registry.monapi.com:5000/monapi/os-api
-
-docker service create --with-registry-auth --replicas 1 --limit-memory="128mb" --name="visualizer" \
-   --constraint 'node.role == manager' --constraint 'engine.labels.role == master' \
-   -p 4000:4000 \
-   -e PORT=4000 -e HOST=${HOST} \
-   -e SERVICE_4000_NAME="visualizer" -e SERVICE_8080_TAGS="service" \
-    --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
-    manomarks/visualizer
