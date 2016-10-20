@@ -72,3 +72,6 @@ echo INSTANCE_ID="$INSTANCE_ID"          >> /etc/docker/environments
 echo REGION="$REGION"                    >> /etc/docker/environments
 echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
 echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
+echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
+
+docker service create --mode global --name registrator --mount type=bind,source=/var/run/docker.sock,target=/tmp/docker.sock gliderlabs/registrator:latest --internal consul://${SWARM_MASTER_IP}:8500
