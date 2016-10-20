@@ -83,6 +83,6 @@ docker service create --with-registry-auth --replicas 1 --limit-memory="128mb" -
    --constraint 'node.role == manager' --constraint 'engine.labels.role == master' \
    -p 4000:4000 \
    -e PORT=4000 -e HOST=${HOST} \
-   -e SERVICE_8080_IGNORE="true" -e SERVICE_4000_NAME="visualizer" -e SERVICE_4000_TAGS="service" \
+   -e SERVICE_4000_NAME="visualizer" -e SERVICE_8080_TAGS="service" \
     --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
     manomarks/visualizer
