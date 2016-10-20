@@ -85,6 +85,6 @@ echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 
 #docker service create --mode global --with-registry-auth --name registrator --mount type=bind,source=/var/run/docker.sock,target=/tmp/docker.sock gliderlabs/registrator:latest --internal consul://${SWARM_MASTER_IP}:8500
-docker network create --driver overlay syslog
-docker service create --mode global --with-registry-auth --name="syslog"                 -e SERVICE_5514_NAME="syslog" -e SERVICE_5514_TAGS="service" --limit-memory="16mb" --network syslog registry.monapi.com:5000/monapi/syslog
-docker service create --mode global --with-registry-auth --name="os-api"    -p 8080:8080 -e SERVICE_8080_NAME="os-api" -e SERVICE_8080_TAGS="service" --limit-memory="16mb" registry.monapi.com:5000/monapi/os-api
+docker network create --driver overlay proxy
+docker service create --mode global --with-registry-auth --name="syslog"                 -e SERVICE_5514_NAME="syslog" -e SERVICE_5514_TAGS="service" --limit-memory="16mb" --network proxy registry.monapi.com:5000/monapi/syslog
+docker service create --mode global --with-registry-auth --name="os-api"                 -e SERVICE_8080_NAME="os-api" -e SERVICE_8080_TAGS="service" --limit-memory="16mb" registry.monapi.com:5000/monapi/os-api
