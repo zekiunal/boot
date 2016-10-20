@@ -6,6 +6,7 @@ PROVIDER="AWS"
 INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 PUBLIC_IPV4=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
 PR_IPV4=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+HOST=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
 REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r ".region")
 
 EXIST_NODE=$(docker run -i --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws ec2 describe-instances --filters Name=instance-id,Values=${INSTANCE_ID} | jq -r ".Reservations[].Instances[]")
@@ -74,7 +75,7 @@ echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
 echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 
-
 #docker service create --mode global --with-registry-auth --name registrator --mount type=bind,source=/var/run/docker.sock,target=/tmp/docker.sock gliderlabs/registrator:latest --internal consul://${SWARM_MASTER_IP}:8500
 docker service create --mode global --with-registry-auth --name="syslog"                 -e SERVICE_5514_NAME="syslog" -e SERVICE_5514_TAGS="service" --limit-memory="16mb" registry.monapi.com:5000/monapi/syslog
 docker service create --mode global --with-registry-auth --name="os-api"    -p 8080:8080 -e SERVICE_8080_NAME="os-api" -e SERVICE_8080_TAGS="service" --limit-memory="16mb" registry.monapi.com:5000/monapi/os-api
+docker service create --replicas 1 --constraint 'node.role == manager' --constraint 'engine.labels.role == master' --with-registry-auth --limit-memory="128mb" -p 4000:4000 -e PORT=4000 --name="visualizer" -e SERVICE_8080_IGNORE="true" -e SERVICE_4000_NAME="visualizer" -e HOST=${HOST} -v /var/run/docker.sock:/var/run/docker.sock manomarks/visualizer
