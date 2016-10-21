@@ -1,0 +1,38 @@
+global
+    log 127.0.0.1   local0
+defaults
+{{ if service "syslog" }}
+    log syslog local1      # send to syslog server
+{{ else }}
+    log global
+{{ end }}
+    mode    http
+    option  httplog
+    option  dontlognull
+    stats enable
+    stats uri /stats
+    retries 3
+    option redispatch
+    timeout connect 5s
+    timeout client 50s
+    timeout server 50s
+    balance roundrobin
+
+frontend http
+    bind *:80
+    bind *:443
+    option http-server-close
+
+{{range $i, $a:=services}}{{if and (.Tags.Contains "service") (.Tags.Contains "backend") (.Tags.Contains "system") }} {{$service_name:=.Name}}{{$prefix := $service_name | replaceAll "-" "."}}
+    # service name : {{$service_name}}
+
+    acl host-rule-{{$i}} hdr(host) -i {{$prefix}}
+    use_backend {{$service_name}}-backend if host-rule-{{$i}}
+
+{{end}}{{end}}
+
+{{range services}}{{if and (.Tags.Contains "service") (.Tags.Contains "backend") (.Tags.Contains "system") }} {{$service_name:=.Name}}
+# service name : {{$service_name}}
+backend {{$service_name}}-backend
+    server {{$service_name}} {{$service_name}}
+{{end}}{{end}}
