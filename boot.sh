@@ -76,6 +76,7 @@ echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
 echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 
+docker network create --driver overlay syslog
 docker service create --with-registry-auth --name="syslog" --replicas 1  --limit-memory="16mb" \
     --network syslog \
     --constraint 'node.role != manager' \
