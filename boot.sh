@@ -83,3 +83,13 @@ docker service create --with-registry-auth --name="syslog" --replicas 1  --limit
     -e SERVICE_514_NAME="syslog" -e SERVICE_514_TAGS="service" \
     -e CONSUL_ADDRESS=$(hostname --i) \
     registry.monapi.com:5000/monapi/syslog
+    
+docker network create --driver overlay proxy
+docker service create --with-registry-auth --name haproxy --limit-memory="64mb" \
+    --network proxy --network syslog \
+    --replicas 1 \
+    -e CONSUL_ADDRESS=$(hostname --i) \
+    --publish 80:80 \
+    --constraint 'node.role == manager' --constraint 'engine.labels.role == master' \
+    registry.monapi.com:5000/monapi/haproxy:service
+    
