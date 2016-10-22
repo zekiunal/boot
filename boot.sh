@@ -86,5 +86,5 @@ docker service create --with-registry-auth --name="syslog" --replicas 1  --limit
     
 docker network create --driver overlay proxy
 
-docker pull  registry.monapi.com:5000/monapi/fpm:monapi-5.6.23
-
+docker pull registry.monapi.com:5000/monapi/fpm:monapi-5.6.23
+docker pull registry.monapi.com:5000/monapi/alpine:3.4
