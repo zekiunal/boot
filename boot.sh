@@ -75,3 +75,10 @@ echo REGION="$REGION"                    >> /etc/docker/environments
 echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
 echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
+
+docker service create --with-registry-auth --name="syslog" --replicas 1  --limit-memory="16mb" \
+    --network syslog \
+    --constraint 'node.role != manager' \
+    -e SERVICE_514_NAME="syslog" -e SERVICE_514_TAGS="service" \
+    -e CONSUL_ADDRESS=$(hostname --i) \
+    registry.monapi.com:5000/monapi/syslog
