@@ -88,3 +88,5 @@ docker network create --driver overlay proxy
 
 docker pull registry.monapi.com:5000/monapi/fpm:monapi-5.6.23
 docker pull registry.monapi.com:5000/monapi/alpine:3.4
+groupadd -r docker
+usermod -a -G docker newrelic
