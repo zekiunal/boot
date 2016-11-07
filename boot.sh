@@ -77,11 +77,10 @@ echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 
 docker network create --driver overlay syslog
-docker service create --with-registry-auth --name="syslog" --replicas 1  --limit-memory="16mb" \
+docker service create --with-registry-auth --name="syslog" --replicas 6  --limit-memory="16mb" \
     --network syslog \
     -e SERVICE_514_NAME="syslog" -e SERVICE_514_TAGS="service" \
     -e CONSUL_ADDRESS=$(hostname --i) \
-    --constraint 'node.role == manager' --constraint 'engine.labels.role == master' \
     registry.monapi.com:5000/monapi/syslog
     
 docker network create --driver overlay proxy
