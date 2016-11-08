@@ -121,9 +121,9 @@ sudo mkdir -p /docker/prometheus/data
 sudo mkdir -p /docker/prometheus/config
 sudo wget  -O /docker/prometheus/config/prometheus.yml https://raw.githubusercontent.com/vfarcic/cloud-provisioning/master/conf/prometheus.yml
 
-docker service create --reserve-memory 64m \
+docker service create \
 --container-label com.monitoring.group=logging \
---repicas 1 \
+--replicas 1 \
 --constraint 'node.role == manager' --constraint 'engine.labels.role == master' \
 --name prometheus \
 --network proxy \
