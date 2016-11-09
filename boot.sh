@@ -22,7 +22,7 @@ if [ "$SERVICE_TYPE" == "swarm-manager" ] && [ "$ROLE" == "master" ]; then
    docker rm -f aws
    docker run -i --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws ec2 create-tags --resources ${INSTANCE_ID} --tags Key=WorkerToken,Value=$(docker swarm join-token -q worker)
    docker rm -f aws
-   SD_BOOT="-server -advertise ${PR_IPV4} -bootstrap"
+   SD_BOOT="-server -advertise ${PR_IPV4} -advertise-wan ${PUBLIC_IPV4} -bootstrap"
     
 elif [ "$SERVICE_TYPE" == "swarm-manager" ] && [ "$ROLE" == "slave" ]; then
    while [[ -z $SWARM_MASTER_NODE ]]; do
@@ -44,7 +44,7 @@ elif [ "$SERVICE_TYPE" == "swarm-manager" ] && [ "$ROLE" == "slave" ]; then
        sleep 1
    done
    docker swarm join --token ${SWARM_MASTER_TOKEN} ${SWARM_MASTER_IP}:2377
-   SD_BOOT="-server -advertise ${PR_IPV4} -join ${SWARM_MASTER_IP}";
+   SD_BOOT="-server -advertise ${PR_IPV4} -advertise-wan ${PUBLIC_IPV4} -join ${SWARM_MASTER_IP}";
 else
    while [[ -z $SWARM_MASTER_NODE ]]; do
        echo 'Waiting for swarm master run ...'
@@ -64,7 +64,7 @@ else
        sleep 1
    done
    docker swarm join --token ${SWARM_WORKER_TOKEN} ${SWARM_MASTER_IP}:2377
-   SD_BOOT="-advertise ${PR_IPV4} -join ${SWARM_MASTER_IP}";
+   SD_BOOT="-advertise ${PR_IPV4} -advertise-wan ${PUBLIC_IPV4} -join ${SWARM_MASTER_IP}";
 fi
 
 echo PR_IP="$PR_IPV4"                    >> /etc/docker/environments
