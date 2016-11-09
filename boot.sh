@@ -80,3 +80,8 @@ docker pull registry.monapi.com:5000/monapi/fpm:monapi-5.6.27
 docker pull registry.monapi.com:5000/monapi/alpine:3.4
 groupadd -r docker
 usermod -a -G docker newrelic
+
+# @todo prometheus storage volume
+sudo mkdir -p /docker/prometheus/data
+sudo mkdir -p /docker/prometheus/config
+sudo wget  -O /docker/prometheus/config/prometheus.yml https://raw.githubusercontent.com/vfarcic/cloud-provisioning/master/conf/prometheus.yml
