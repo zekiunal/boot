@@ -143,4 +143,5 @@ grafana/grafana:3.1.1
 docker service create --with-registry-auth --name elasticsearch --network proxy --container-label com.monitoring.group=logging -p 9200:9200 --reserve-memory 500m  elasticsearch:2.4
 docker service create --with-registry-auth --name logstash      --network proxy --container-label com.monitoring.group=logging -e LOGSPOUT=ignore --reserve-memory 500m  registry.monapi.com:5000/monapi/logstash:service2
 docker service create --with-registry-auth --name logspout      --network proxy --container-label com.monitoring.group=logging --mode global --mount "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" -e SYSLOG_FORMAT=rfc3164 gliderlabs/logspout syslog://logstash:51415
+docker service create --with-registry-auth --name kibana        --network proxy -p 5601:5601 -e ELASTICSEARCH_URL=http://elasticsearch:9200 --container-label com.monitoring.group=logging --reserve-memory 450m kibana:4.6
 
