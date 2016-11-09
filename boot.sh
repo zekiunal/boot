@@ -91,6 +91,7 @@ docker service create --with-registry-auth --name="syslog" --mode global --reser
     --network syslog \
     -e SERVICE_514_NAME="syslog" -e SERVICE_514_TAGS="service" \
     -e CONSUL_ADDRESS=$(hostname --i) \
+    --constraint 'node.role != manager' \
     registry.monapi.com:5000/monapi/syslog
 
 docker service create --name node-exporter --mode global --network proxy --reserve-memory 64m \
@@ -100,6 +101,7 @@ docker service create --name node-exporter --mode global --network proxy --reser
 --mount "type=bind,source=/,target=/rootfs" \
 --mount "type=bind,source=/etc/hostname,target=/etc/host_hostname" \
 -e HOST_HOSTNAME=/etc/host_hostname \
+--constraint 'node.role != manager' \
 basi/node-exporter:v0.1.1 \
 -collector.procfs /host/proc \
 -collector.sysfs /host/proc \
@@ -115,6 +117,7 @@ docker service create --name cadvisor --reserve-memory 64m \
 --mount "type=bind,source=/var/run,target=/var/run" \
 --mount "type=bind,source=/sys,target=/sys" \
 --mount "type=bind,source=/var/lib/docker,target=/var/lib/docker" \
+--constraint 'node.role != manager' \
 google/cadvisor:v0.24.1
 
 sudo mkdir -p /docker/prometheus/data
@@ -138,10 +141,11 @@ docker service create --reserve-memory 64m \
 --name grafana \
 --network proxy \
 -p 3000:3000 \
+--constraint 'node.role != manager' \
 grafana/grafana:3.1.1
 
-docker service create --with-registry-auth --name elasticsearch --network proxy --container-label com.monitoring.group=logging -p 9200:9200 --reserve-memory 500m  elasticsearch:2.4
-docker service create --with-registry-auth --name logstash      --network proxy --container-label com.monitoring.group=logging -e LOGSPOUT=ignore --reserve-memory 500m  registry.monapi.com:5000/monapi/logstash:service2
-docker service create --with-registry-auth --name logspout      --network proxy --container-label com.monitoring.group=logging --mode global --mount "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" -e SYSLOG_FORMAT=rfc3164 gliderlabs/logspout syslog://logstash:51415
-docker service create --with-registry-auth --name kibana        --network proxy -p 5601:5601 -e ELASTICSEARCH_URL=http://elasticsearch:9200 --container-label com.monitoring.group=logging --reserve-memory 450m kibana:4.6
+docker service create --with-registry-auth --name elasticsearch --network proxy --constraint 'node.role != manager' --container-label com.monitoring.group=logging -p 9200:9200 --reserve-memory 500m  elasticsearch:2.4
+docker service create --with-registry-auth --name logstash      --network proxy --constraint 'node.role != manager' --container-label com.monitoring.group=logging -e LOGSPOUT=ignore --reserve-memory 500m  registry.monapi.com:5000/monapi/logstash:service2
+docker service create --with-registry-auth --name logspout      --network proxy --constraint 'node.role != manager' --container-label com.monitoring.group=logging --mode global --mount "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" -e SYSLOG_FORMAT=rfc3164 gliderlabs/logspout syslog://logstash:51415
+docker service create --with-registry-auth --name kibana        --network proxy --constraint 'node.role != manager' -p 5601:5601 -e ELASTICSEARCH_URL=http://elasticsearch:9200 --container-label com.monitoring.group=logging --reserve-memory 450m kibana:4.6
 
