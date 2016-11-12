@@ -1,4 +1,3 @@
-
 #!/bin/bash
 docker rm -f aws
 docker pull cgswong/aws:aws
@@ -75,7 +74,7 @@ else
    docker swarm join --token ${SWARM_WORKER_TOKEN} ${SWARM_MASTER_IP}:2377
    SD_BOOT="-advertise ${PR_IPV4} -advertise-wan ${PUBLIC_IPV4} -join ${SWARM_MASTER_IP}";
    docker network create --driver overlay proxy
-   $(echo 'docker service create --name consul-slave --constraint "engine.labels.type != swarm-manager" --network=proxy -p 8300:8300 -p 8301:8301 -p 8301:8301/udp -p 8302:8302 -p 8302:8302/udp -p 8400:8400 -p 8500:8500 -p 53:53/udp -e SERVICE_53_IGNORE="true" -e SERVICE_8300_IGNORE="true" -e SERVICE_8301_IGNORE="true" -e SERVICE_8302_IGNORE="true" -e SERVICE_8400_IGNORE="true" -e SERVICE_8500_IGNORE="true" registry.monapi.com:5000/monapi/consul -dc=AWS-EU1 -advertise '${PR_IPV4}' -advertise-wan '${PUBLIC_IPV4}' -join '${SWARM_MASTER_IP}'')
+   $(echo 'docker service create --name consul-client --constraint "engine.labels.type != swarm-manager" --network=proxy -p 8300:8300 -p 8301:8301 -p 8301:8301/udp -p 8302:8302 -p 8302:8302/udp -p 8400:8400 -p 8500:8500 -p 53:53/udp -e SERVICE_53_IGNORE="true" -e SERVICE_8300_IGNORE="true" -e SERVICE_8301_IGNORE="true" -e SERVICE_8302_IGNORE="true" -e SERVICE_8400_IGNORE="true" -e SERVICE_8500_IGNORE="true" registry.monapi.com:5000/monapi/consul -dc=AWS-EU1 -advertise '${PR_IPV4}' -advertise-wan '${PUBLIC_IPV4}' -join '${SWARM_MASTER_IP}'')
 fi
 
 echo PR_IP="$PR_IPV4"                    >> /etc/docker/environments
