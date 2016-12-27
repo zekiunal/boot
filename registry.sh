@@ -23,6 +23,3 @@ echo INSTANCE_ID="$INSTANCE_ID"          >> /etc/docker/environments
 echo REGION="$REGION"                    >> /etc/docker/environments
 echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
 echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
-
-groupadd -r docker
-usermod -a -G docker newrelic
