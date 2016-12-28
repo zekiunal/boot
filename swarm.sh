@@ -87,7 +87,6 @@ echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 
 docker pull registry.monapi.com:5000/monapi/fpm:monapi-5.6.29
-docker pull registry.monapi.com:5000/monapi/fpm:nginx
 docker pull registry.monapi.com:5000/monapi/alpine:3.4
 
 # @todo prometheus storage volume
