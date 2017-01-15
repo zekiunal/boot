@@ -72,19 +72,3 @@ sudo mkdir /workspace && sudo chmod 777 /workspace
 sudo mkdir -p /home/core/.docker/machine/machines
 
 docker pull registry.monapi.com:5000/monapi/dind
-
-sudo curl -sSL https://dl.bintray.com/emccode/rexray/install | sh -s -- stable
-sudo echo "
-libstorage:
-  service: efs
-  server:
-    services:
-      efs:
-        driver: efs
-        efs:
-          accessKey: ${AWS_KEY}
-          secretKey: ${AWS_SECRET}
-          securityGroups: ${AWS_SECURTY_GROUP}
-          region: ${AWS_REGION}" \
-| sudo tee /etc/rexray/config.yml
-sudo rexray service start
