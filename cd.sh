@@ -71,3 +71,4 @@ echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 sudo mkdir /workspace && sudo chmod 777 /workspace
 sudo mkdir -p /home/core/.docker/machine/machines
 
+docker pull registry.monapi.com:5000/monapi/dind
