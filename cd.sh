@@ -69,4 +69,5 @@ echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
 
 sudo mkdir /workspace && sudo chmod 777 /workspace
+sudo mkdir -p $HOME/.docker/machine/machines
 
