@@ -67,3 +67,6 @@ echo REGION="$REGION"                    >> /etc/docker/environments
 echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
 echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
+
+sudo mkdir /workspace && sudo chmod 777 /workspace
+
