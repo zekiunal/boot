@@ -76,4 +76,4 @@ sudo mkdir -p /docker/prometheus/data
 sudo mkdir -p /docker/prometheus/config
 sudo wget  -O /docker/prometheus/config/prometheus.yml https://raw.githubusercontent.com/vfarcic/cloud-provisioning/master/conf/prometheus.yml
 
-cd / && sudo curl -L git.io/scope -o /scope && sudo chmod a+x /scope && sudo chown core:core /scope  && ./scope launch --service-token=c84ffqfkjk37nj564dg6jxicd3egog85
+#cd / && sudo curl -L git.io/scope -o /scope && sudo chmod a+x /scope && sudo chown core:core /scope  && ./scope launch --service-token=c84ffqfkjk37nj564dg6jxicd3egog85
