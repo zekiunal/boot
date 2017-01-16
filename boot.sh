@@ -81,5 +81,5 @@ sudo cat << EOF > /tmp/${ENV}.json
 {"domain": "${STACK}", "ip": "${SWARM_MASTER_IP}"}
 EOF
 
-sudo docker run -i --rm --name aws -v /tmp:/tmp -v /home/core/.aws:/root/.aws cgswong/aws:aws s3 cp /tmp/stack.json s3://bucket.ci.monapi.com/stack.json 
+sudo docker run -i --rm --name aws -v /tmp:/tmp -v /home/core/.aws:/root/.aws cgswong/aws:aws s3 cp /tmp/${ENV}.json s3://bucket.ci.monapi.com/${ENV}.json 
 #cd / && sudo curl -L git.io/scope -o /scope && sudo chmod a+x /scope && sudo chown core:core /scope  && ./scope launch --service-token=c84ffqfkjk37nj564dg6jxicd3egog85
