@@ -12,6 +12,7 @@ EXIST_NODE=$(docker run -i --rm --name aws -v /home/core/.aws:/root/.aws cgswong
 STACK=$(echo ${EXIST_NODE} | jq '.Tags[] | select(.Key == "Stack")'  | jq  -r ".Value" )
 SERVICE_TYPE=$(echo ${EXIST_NODE} | jq '.Tags[] | select(.Key == "Type")'  | jq  -r ".Value" )
 ROLE=$(echo ${EXIST_NODE} | jq '.Tags[] | select(.Key == "Role")'  | jq  -r ".Value" )
+ENV=$(echo ${EXIST_NODE} | jq '.Tags[] | select(.Key == "Env")'  | jq  -r ".Value" )
 
 if [ "$SERVICE_TYPE" == "swarm-manager" ] && [ "$ROLE" == "master" ]; then
    SWARM_MASTER_IP=${PR_IPV4}
@@ -76,7 +77,7 @@ sudo mkdir -p /docker/prometheus/data
 sudo mkdir -p /docker/prometheus/config
 sudo wget  -O /docker/prometheus/config/prometheus.yml https://raw.githubusercontent.com/vfarcic/cloud-provisioning/master/conf/prometheus.yml
 
-sudo cat << EOF > /tmp/stage.json
+sudo cat << EOF > /tmp/${ENV}.json
 {"domain": "${STACK}", "ip": "${SWARM_MASTER_IP}"}
 EOF
 
