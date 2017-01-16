@@ -76,4 +76,6 @@ sudo mkdir -p /docker/prometheus/data
 sudo mkdir -p /docker/prometheus/config
 sudo wget  -O /docker/prometheus/config/prometheus.yml https://raw.githubusercontent.com/vfarcic/cloud-provisioning/master/conf/prometheus.yml
 
+sudo echo ${SWARM_MASTER_IP} >> /stack.json
+docker run -i --rm --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws s3 cp /stack.json s3://bucket.ci.monapi.com/stack.json 
 #cd / && sudo curl -L git.io/scope -o /scope && sudo chmod a+x /scope && sudo chown core:core /scope  && ./scope launch --service-token=c84ffqfkjk37nj564dg6jxicd3egog85
