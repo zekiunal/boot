@@ -76,8 +76,8 @@ sudo mkdir -p /docker/prometheus/data
 sudo mkdir -p /docker/prometheus/config
 sudo wget  -O /docker/prometheus/config/prometheus.yml https://raw.githubusercontent.com/vfarcic/cloud-provisioning/master/conf/prometheus.yml
 
-sudo cat << EOF > /tmp/stack.json
-[{"stack": "${STACK}", "ip": "${SWARM_MASTER_IP}"}]
+sudo cat << EOF > /tmp/stage.json
+{"domain": "${STACK}", "ip": "${SWARM_MASTER_IP}"}
 EOF
 
 sudo docker run -i --rm --name aws -v /tmp:/tmp -v /home/core/.aws:/root/.aws cgswong/aws:aws s3 cp /tmp/stack.json s3://bucket.ci.monapi.com/stack.json 
