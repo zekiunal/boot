@@ -20,7 +20,7 @@ if [ "$SERVICE_TYPE" == "quorum" ] && [ "$ROLE" == "master" ]; then
    docker run -i --rm --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws ec2 create-tags --resources ${INSTANCE_ID} --tags Key=WorkerToken,Value=$(docker swarm join-token -q worker)
    SD_BOOT="-server -advertise ${PR_IPV4} -advertise-wan ${PUBLIC_IPV4} -bootstrap"
     
-elif [ "$SERVICE_TYPE" == "quorumr" ] && [ "$ROLE" == "slave" ]; then
+elif [ "$SERVICE_TYPE" == "quorum" ] && [ "$ROLE" == "slave" ]; then
    while [[ -z $SWARM_MASTER_NODE ]]; do
        echo 'Waiting for swarm master run ...'
        SWARM_MASTER_NODE=$(docker run -i --rm --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag:Type,Values=quorum Name=tag:Role,Values=master Name=tag:Stack,Values=${STACK} | jq -r ".Reservations[].Instances[]")
