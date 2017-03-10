@@ -60,14 +60,14 @@ else
    SD_BOOT="-advertise ${PR_IPV4} -advertise-wan ${PUBLIC_IPV4} -join ${SWARM_MASTER_IP}";
 fi
 
-echo PR_IP="$PR_IPV4"                    >> /etc/docker/environments
-echo STACK="$STACK"                      >> /etc/docker/environments
-echo SERVICE_TYPE="$SERVICE_TYPE"        >> /etc/docker/environments
-echo INSTANCE_ID="$INSTANCE_ID"          >> /etc/docker/environments
-echo REGION="$REGION"                    >> /etc/docker/environments
-echo PROVIDER="$PROVIDER"                >> /etc/docker/environments
-echo SD_BOOT="$SD_BOOT"                  >> /etc/docker/environments
-echo SWARM_MASTER_IP="$SWARM_MASTER_IP"  >> /etc/docker/environments
+echo PR_IP='"$PR_IPV4"'                    >> /etc/docker/environments
+echo STACK='"$STACK"'                      >> /etc/docker/environments
+echo SERVICE_TYPE='"$SERVICE_TYPE"'        >> /etc/docker/environments
+echo INSTANCE_ID='"$INSTANCE_ID"'          >> /etc/docker/environments
+echo REGION='"$REGION"'                    >> /etc/docker/environments
+echo PROVIDER='"$PROVIDER"'                >> /etc/docker/environments
+echo SD_BOOT='"$SD_BOOT"'                  >> /etc/docker/environments
+echo SWARM_MASTER_IP='"$SWARM_MASTER_IP"'  >> /etc/docker/environments
 
 docker pull registry.monapi.com:5000/monapi/fpm:monapi-5.6.29
 docker pull registry.monapi.com:5000/monapi/alpine:3.4
