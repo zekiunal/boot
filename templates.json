@@ -1,5 +1,14 @@
 [
   {
+    "title": "Memcache",
+    "description": "A distributed memory object caching system",
+    "logo": "http://technet.sector19.net/wp-content/uploads/2015/12/MemCacheD.png",
+    "image": "registry.monapi.com:5000/monapi/memcache:latest",
+    "ports": [
+      "11211/tcp"
+    ]
+  },
+  {
     "title": "Registry",
     "description": "Docker image registry",
     "logo": "https://cloudinovasi.id/assets/img/logos/registry.png",
