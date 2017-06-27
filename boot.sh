@@ -22,6 +22,7 @@ done
 
 while [[ -z $VAULT_TOKEN ]]; do
    echo 'Waiting for vault token ...'
+   VAULT_SERVER=$(docker run -i --rm --name aws -v /home/core/.aws:/root/.aws cgswong/aws:aws ec2 describe-instances --filters Name=instance-state-name,Values=running Name=tag:Type,Values=ca-server Name=tag:Role,Values=master Name=tag:Stack,Values=${STACK} | jq -r ".Reservations[].Instances[]")
    VAULT_TOKEN=$(echo ${VAULT_SERVER} | jq '.Tags[] | select(.Key == "VaultToken")'  | jq  -r ".Value" )
    sleep 1
 done
