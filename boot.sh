@@ -20,6 +20,12 @@ while [[ -z $VAULT_SERVER ]]; do
    sleep 1
 done
 
+while [[ -z $VAULT_TOKEN ]]; do
+   echo 'Waiting for vault token ...'
+   VAULT_TOKEN=$(echo ${VAULT_SERVER} | jq '.Tags[] | select(.Key == "VaultToken")'  | jq  -r ".Value" )
+   sleep 1
+done
+
 VAULT_SERVER_IP=$(echo ${VAULT_SERVER} | jq '."PrivateIpAddress"')
 VAULT_SERVER_IP=${VAULT_SERVER_IP#\"}
 VAULT_SERVER_IP=${VAULT_SERVER_IP%$suffix}
@@ -80,6 +86,7 @@ echo PROVIDER="'${PROVIDER}'"                >> /etc/docker/environments
 echo SD_BOOT="'${SD_BOOT}'"                  >> /etc/docker/environments
 echo SWARM_MASTER_IP="'${SWARM_MASTER_IP}'"  >> /etc/docker/environments
 echo VAULT_SERVER_IP="'${VAULT_SERVER_IP}'"  >> /etc/docker/environments
+echo VAULT_TOKEN="'${VAULT_TOKEN}'"          >> /etc/docker/environments
 
 docker pull registry.monapi.com:5000/monapi/fpm:monapi-5.6.30
 docker pull registry.monapi.com:5000/monapi/alpine:3.4
